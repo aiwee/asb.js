@@ -15,8 +15,8 @@
         ...
     };
     @domain - name of data table
-    @recordXX - unique name of record in the domain
-    @propertyXX - unique name of property in each record
+    @record - unique name of record in the domain
+    @property - unique name of property in each record
     @value - any value of property
  */
 
@@ -139,19 +139,90 @@
             if (!localStorage.getItem(domain))
                 asb.addDomain(domain);
             var data = asb.getData(domain);
-
             if (!data.hasOwnProperty(record))
                 asb.addRecord(domain, record);
-
             data = asb.getData(domain);
-
             if (!data[record].hasOwnProperty(property))
                 asb.addProperty(domain, record, property);
 
             data = asb.getData(domain);
-
             data[record][property] = value;
             asb.saveData(domain, data);
+        },
+        createDomain: function(model, recordPrefix) {
+            util.quit(model);
+            recordPrefix = recordPrefix || "001";
+            var domain = Object.keys(model)[0],
+                props = model[domain];
+            asb.addDomain(domain);
+            asb.addRecord(domain, recordPrefix);
+            for (var i = 0; i < props.length; i++) {
+                asb.addProperty(domain, recordPrefix, props[i]);
+            }
+        },
+        count: function(domain) {
+            util.quit(domain);
+            var data = asb.getData(domain);
+            return Object.keys(data).length;
+        },
+        findRecord: function(domain, record) {
+            util.quit(domain, record);
+            var data = asb.getData(domain);
+            //var count = Object.keys(data).length;
+            for (var prop in data) {
+                if (data.hasOwnProperty(prop)) {
+                    if (prop === record) {
+                        return data[prop];
+                    }
+                }
+            }
+        },
+        findRecordsByProperty: function(domain, property) {
+            util.quit(domain, property);
+            var data = asb.getData(domain),
+                result = {};
+            for (var prop in data) {
+                if (data.hasOwnProperty(prop)) {
+                    //return data[prop];
+                    var str = Object.keys(data[prop]).toString();
+                    if (str.toLowerCase() === property.toLowerCase()) {
+                        //alert(Object.keys(data[prop]));
+                        result[prop] = data[prop];
+                    }
+                }
+            }
+            return result;
+        },
+        delRecord: function(domain, record) {
+            util.quit(domain, record);
+            var data = asb.getData(domain);
+            var res;
+            for (var prop in data) {
+                if (data.hasOwnProperty(prop)) {
+                    if (prop === record) {
+                        res = delete data[prop];
+                        if (res)
+                            asb.saveData(domain, data);
+                    }
+                }
+            }
+            return res;
+        },
+        delRecordByProperty: function(domain, property) {
+            util.quit(domain, property);
+            var data = asb.getData(domain);
+            var res;
+            for (var prop in data) {
+                if (data.hasOwnProperty(prop)) {
+                    var str = Object.keys(data[prop]).toString();
+                    if (str.toLowerCase() === property.toLowerCase()) {
+                        res = delete data[prop];
+                        if (res)
+                            asb.saveData(domain, data);
+                    }
+                }
+            }
+            return res;
         }
     };
     return asb;
