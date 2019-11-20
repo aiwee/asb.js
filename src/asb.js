@@ -63,6 +63,19 @@
     };
     var asb = {
         /*
+            Clears whole local storage
+         */
+        clearStorage: function() {
+            localStorage.clear();
+        },
+        /*
+            Removes domain from local storage with key @name
+         */
+        delDomain: function (name) {
+            util.quit(name);
+            localStorage.removeItem(name);
+        },
+        /*
             Creates empty object in the local storage with key @name
          */
         addDomain: function(name) {
@@ -165,32 +178,47 @@
             var data = asb.getData(domain);
             return Object.keys(data).length;
         },
-        findRecord: function(domain, record) {
+        findRecord: function(domain, record, type) {
             util.quit(domain, record);
-            var data = asb.getData(domain);
+            var data = asb.getData(domain),
+                res = null;
             //var count = Object.keys(data).length;
             for (var prop in data) {
                 if (data.hasOwnProperty(prop)) {
-                    if (prop === record) {
-                        return data[prop];
-                    }
+                    if (prop === record)
+                        res = data[prop];
                 }
             }
+            if (type == 'json')
+                res = JSON.stringify(res);
+            return res;
         },
-        findRecordsByProperty: function(domain, property) {
+        findRecordByProperty: function(domain, property, type) {
             util.quit(domain, property);
             var data = asb.getData(domain),
                 result = {};
             for (var prop in data) {
                 if (data.hasOwnProperty(prop)) {
-                    //return data[prop];
                     var str = Object.keys(data[prop]).toString();
-                    if (str.toLowerCase() === property.toLowerCase()) {
-                        //alert(Object.keys(data[prop]));
-                        result[prop] = data[prop];
+                    if (str.includes(property)) {
+                        if (str.includes(",")) {
+                            str = str.split(",");
+                            for (var i = 0; i < str.length; i++) {
+                                if (str[i].toLowerCase() === property.toLowerCase()) {
+                                    result[prop] = data[prop];
+                                }
+                            }
+                        } else {
+                            if (str.toLowerCase() === property.toLowerCase()) {
+                                //alert(Object.keys(data[prop]));
+                                result[prop] = data[prop];
+                            }
+                        }
                     }
                 }
             }
+            if (type == 'json')
+                result = JSON.stringify(result);
             return result;
         },
         delRecord: function(domain, record) {
@@ -222,6 +250,88 @@
                     }
                 }
             }
+            return res;
+        },
+        findProperty: function(domain, record, property, type) {
+            util.quit(domain, record, property);
+            var res = null,
+                rec = asb.findRecord(domain, record);
+            for (var prop in rec)
+                if (rec.hasOwnProperty(prop))
+                    if (prop === property)
+                        res = rec[prop];
+            if (type == "json") return JSON.stringify(res);
+            else return res;
+        },
+        /*
+            **********************************************
+            Manipulations with Property Value as an Object
+            **********************************************
+        */
+        addParameter: function(domain, record, property, param, value) {
+            util.quit(domain, record, property, param, value);
+            var data = asb.getData(domain);
+            if (!data[record].hasOwnProperty(property))
+                asb.addProperty(domain, record, property);
+            data = asb.getData(domain);
+
+            if (data[record][property] == "") {
+                var prm =new Object();
+                prm[param] = value;
+                data[record][property] = prm;
+            } else
+                data[record][property][param] = value;
+
+            //alert(JSON.stringify(data));
+            asb.saveData(domain, data);
+        },
+
+
+        /*
+            Finds in the @data property by @name and returns it's value as
+            - default: an object
+            - optional: by @type: "json"
+         */
+        propFind: function(data, name, type) {
+            var res = null;
+            if (data)
+                res = Object.keys(data[name]);
+            if (type == "json")
+                res = JSON.stringify(res);
+            return res;
+        },
+        /*
+            Updates property with @name, by new @value
+         */
+        propUpdate: function(data, name, value) {
+            var res = null;
+            if (data)
+                data[name] = value;
+        },
+        /*
+            Deletes property by it's @name
+         */
+        propDelete: function(data, name) {
+            var res;
+            for (var prop in data) {
+                if (data.hasOwnProperty(prop)) {
+                    if (prop === name) {
+                        res = delete data[prop];
+                        // if (res)
+                        //     asb.saveData(domain, data);
+                    }
+                }
+            }
+            return res;
+        },
+        /*
+            Finds a property by @name and compare it's value with @compareto value
+         */
+        propCompare: function(data, name, compareto) {
+            var res = false;
+            if (data)
+                if (data[name] === compareto)
+                    res = true;
             return res;
         }
     };

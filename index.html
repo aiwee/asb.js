@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Local Storage Data Base</title>
+
+</head>
+<body>
+
+    <div class="wrap" style="padding: 8px;">
+        <h5>Add Domain</h5>
+        <input type="text" name="domain" placeholder="Domain Name">
+        <input id="set_domain" type="button" name="save" value="Save">
+        <input id="retrive_domain" type="button" name="save" value="Retrive">
+        <input id="delete_domain" type="button" name="save" value="Delete">
+    </div>
+
+    <div class="wrap" style="padding: 8px;">
+        <h5>Add Record</h5>
+        <input type="text" name="domain" placeholder="Domain Name">
+        <input type="text" name="record" placeholder="Record Name">
+        <input id="add_record" type="button" value="Add record">
+        <input id="find_record" type="button" value="Find record">
+        <input id="delete_record" type="button" value="Delete record">
+    </div>
+
+    <div class="wrap" style="padding: 8px;">
+        <h5>Add Property</h5>
+        <input type="text" name="domain" placeholder="Domain Name">
+        <input type="text" name="record" placeholder="Record Name">
+        <input type="text" name="property" placeholder="Property Name">
+        <input id="add_property" type="button" value="Add property">
+        <input id="find_recordByProp" type="button" value="Find Record">
+        <input id="find_property" type="button" value="Retrive property">
+    </div>
+
+    <div class="wrap" style="padding: 8px;">
+        <h5>Update Property</h5>
+        <input type="text" name="domain" placeholder="Domain Name">
+        <input type="text" name="record" placeholder="Record Name">
+        <input type="text" name="property" placeholder="Property Name">
+        <input type="text" name="property_val" placeholder="Property Value">
+        <input id="update_property" type="button" value="Update property">
+    </div>
+
+    <div class="wrap" style="padding: 8px;">
+        <h5>Add Property With Value</h5>
+        <input type="text" name="domain" placeholder="Domain Name">
+        <input type="text" name="record" placeholder="Record Name">
+        <input type="text" name="property" placeholder="Property Name">
+        <input type="text" name="property_val" placeholder="Property Value">
+        <input id="push_property" type="button" value="Push property">
+    </div>
+
+    <div class="wrap" style="padding: 8px;">
+        <h5>Add Property Parameters</h5>
+        <input type="text" name="domain" placeholder="Domain Name">
+        <input type="text" name="record" placeholder="Record Name">
+        <input type="text" name="property" placeholder="Property Name">
+        <br/><br/>
+        <input type="text" name="param" placeholder="Parameter Name">
+        <input type="text" name="param_val" placeholder="Parameter Value">
+
+        <input id="add_prop_param" type="button" value="Push property parameter">
+
+        <br/><br/>
+        <input id="upd_prop_param" type="button" value="Update property parameter">
+    </div>
+
+
+    <div class="wrap" style="padding: 8px;">
+        <h5>Delete Record By Property</h5>
+        <input type="text" name="domain" placeholder="Domain Name">
+        <input type="text" name="property" placeholder="Property Name">
+        <input id="delby_property" type="button" value="Delete record">
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/teobyte/bluesrc@2.0.8/js/bz-core.min.js"></script>
+    <script src="src/asb.js"></script>
+    <script>
+        (function() {
+
+
+
+
+            var setDomain = bzDom('#set_domain');
+            setDomain.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    domainName = $domain.val();
+                asb.addDomain(domainName);
+            });
+
+            var retriveDomain = bzDom('#retrive_domain');
+            retriveDomain.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    domainName = $domain.val();
+                alert(JSON.stringify(asb.getData(domainName)));
+            });
+
+            var delDomain = bzDom('#delete_domain');
+            delDomain.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    domainName = $domain.val();
+                asb.delDomain(domainName);
+            });
+
+            var addRecord = bzDom('#add_record');
+            addRecord.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val();
+                asb.addRecord(domainName, recordName);
+            });
+
+            var delRecord = bzDom('#delete_record');
+            delRecord.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val();
+                asb.delRecord(domainName, recordName);
+            });
+
+            var findRecord = bzDom('#find_record');
+            findRecord.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val();
+                alert(asb.findRecord(domainName, recordName, "json"));
+            });
+
+            var addProp = bzDom('#add_property');
+            addProp.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    $prop = $wrap.find('[name=property]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val(),
+                    propName = $prop.val();
+                asb.addProperty(domainName, recordName, propName);
+            });
+
+            var updProp = bzDom('#update_property');
+            updProp.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    $prop = $wrap.find('[name=property]'),
+                    $propVal = $wrap.find('[name=property_val]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val(),
+                    propName = $prop.val(),
+                    propVal = $propVal.val();
+                asb.updateProperty(domainName, recordName, propName, propVal);
+            });
+
+            var findRecByProp = bzDom('#find_recordByProp');
+            findRecByProp.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $prop = $wrap.find('[name=property]'),
+                    domainName = $domain.val(),
+                    propName = $prop.val();
+                alert(asb.findRecordByProperty(domainName, propName, "json"));
+            });
+
+            var pushProp = bzDom('#push_property');
+            pushProp.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    $prop = $wrap.find('[name=property]'),
+                    $propVal = $wrap.find('[name=property_val]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val(),
+                    propName = $prop.val(),
+                    propVal = $propVal.val();
+                asb.pushData(domainName, recordName, propName, propVal);
+            });
+
+            var findProp = bzDom('#find_property');
+            findProp.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    $prop = $wrap.find('[name=property]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val(),
+                    propName = $prop.val();
+                alert(asb.findProperty(domainName, recordName, propName, "json"));
+            });
+
+            var addParam = bzDom('#add_prop_param');
+            addParam.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    $prop = $wrap.find('[name=property]'),
+                    $param = $wrap.find('[name=param]'),
+                    $paramVal = $wrap.find('[name=param_val]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val(),
+                    propName = $prop.val(),
+                    paramName = $param.val(),
+                    paramVal = $paramVal.val();
+                asb.addParameter(domainName, recordName, propName, paramName, paramVal);
+            });
+
+            var delRecByProp = bzDom('#delby_property');
+            delRecByProp.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $prop = $wrap.find('[name=property]'),
+                    domainName = $domain.val(),
+                    propName = $prop.val();
+                asb.delRecordByProperty(domainName, propName);
+            });
+
+        })();
+    </script>
+</body>
+</html>
