@@ -84,23 +84,28 @@
             localStorage.setItem(name, JSON.stringify(record));
         },
         /*
+            Updates domain in the local storage
+         */
+        updateDomain: function(domain, data) {
+            util.quit(domain, data);
+            localStorage.setItem(domain, JSON.stringify(data));
+        },
+        /*
             Creates new record in the @domain
          */
         addRecord: function(domain, record) {
             util.quit(domain, record);
             var data = asb.getDomain(domain);
             data[record] = {};
-            //asb.saveData(domain, data);
             asb.updateDomain(domain, data);
         },
         /*
-            Creates new property in the record
+            Updates record in the domain
          */
-        addProperty: function(domain, record, property) {
+        updateRecord: function(domain, record, property) {
             util.quit(domain, record, property);
             var data = asb.getDomain(domain);
-            data[record][property] = "";
-            //asb.saveData(domain, data);
+            data[record] = property;
             asb.updateDomain(domain, data);
         },
         /*
@@ -113,29 +118,12 @@
             else return JSON.parse(dmn);
         },
         /*
-            Saves data to the domain
+            Creates new property in the record
          */
-        // ToDo: maybe updateDomain method will be enough
-        // deprecated
-        // saveData: function(domain, data) {
-        //     util.quit(domain, data);
-        //     asb.updateDomain(domain, data);
-        // },
-        /*
-            Updates domain in the local storage
-         */
-        updateDomain: function(domain, data) {
-            util.quit(domain, data);
-            localStorage.setItem(domain, JSON.stringify(data));
-        },
-        /*
-            Updates record in the domain
-         */
-        updateRecord: function(domain, record, property) {
+        addProperty: function(domain, record, property) {
             util.quit(domain, record, property);
             var data = asb.getDomain(domain);
-            data[record] = property;
-            //asb.saveData(domain, data);
+            data[record][property] = "";
             asb.updateDomain(domain, data);
         },
         /*
@@ -145,7 +133,6 @@
             util.quit(domain, record, property, value);
             var data = asb.getDomain(domain);
             data[record][property] = value;
-            //asb.saveData(domain, data);
             asb.updateDomain(domain, data);
         },
         pushData: function(domain, record, property, value) {
@@ -161,7 +148,6 @@
 
             data = asb.getDomain(domain);
             data[record][property] = value;
-            //asb.saveData(domain, data);
             asb.updateDomain(domain, data);
         },
         createDomain: function(model, recordPrefix) {
@@ -233,7 +219,6 @@
                         res = delete data[prop];
                         if (res)
                             asb.updateDomain(domain, data);
-                            //asb.saveData(domain, data);
                     }
                 }
             }
@@ -250,7 +235,6 @@
                         res = delete data[prop];
                         if (res)
                             asb.updateDomain(domain, data);
-                            //asb.saveData(domain, data);
                     }
                 }
             }
@@ -279,7 +263,6 @@
                         if (res) {
                             data[record] = rec;
                             asb.updateDomain(domain, data);
-                            //asb.saveData(domain, data);
                         }
                     }
                 }
@@ -300,16 +283,12 @@
             if (!data[record].hasOwnProperty(property))
                 asb.addProperty(domain, record, property);
             data = asb.getDomain(domain);
-
             if (data[record][property] == "") {
                 var prm =new Object();
                 prm[param] = value;
                 data[record][property] = prm;
             } else
                 data[record][property][param] = value;
-
-            //alert(JSON.stringify(data));
-            //asb.saveData(domain, data);
             asb.updateDomain(domain, data);
         },
         /*
@@ -319,7 +298,6 @@
             util.quit(domain, record, property, param, value);
             var data = asb.getDomain(domain);
             data[record][property][param] = value;
-            //asb.saveData(domain, data);
             asb.updateDomain(domain, data);
         },
         /*
@@ -336,7 +314,6 @@
                         res = delete prop[prm];
                         if (res) {
                             data[record][property] = prop;
-                            //asb.saveData(domain, data);
                             asb.updateDomain(domain, data);
                         }
                     }
@@ -383,7 +360,7 @@
                     if (prop === name) {
                         res = delete data[prop];
                         // if (res)
-                        //     asb.saveData(domain, data);
+                        //     asb.updateDomain(domain, data);
                     }
                 }
             }
