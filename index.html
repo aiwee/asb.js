@@ -7,83 +7,176 @@
 </head>
 <body>
 
-    <div class="wrap" style="padding: 8px;">
-        <h5>Add Domain</h5>
-        <input type="text" name="domain" placeholder="Domain Name">
-        <input id="set_domain" type="button" name="save" value="Save">
-        <input id="retrive_domain" type="button" name="save" value="Retrive">
-        <input id="delete_domain" type="button" name="save" value="Delete">
+    <div style="padding: 16px;">
+
+        <h1>ASB.js</h1>
+
+        <p>
+            Data base is a JSON object of the next structure:
+        </p>
+        <p>
+            { @domain: { @record01: { @property01: { @parameter01: value, @parameter02: value,... @parameterN: value }, @property02: { },... @propertyN {  }  } } }
+        </p>
+        <p>
+            The following library allows to manipulate with this JSON abject in the DB CRUD manner, updating local storage after every operation.
+        </p>
+
+        <div class="wrap" style="padding: 8px;">
+            <h5>Add Domain</h5>
+
+            <p>
+                Creates in the localstorage key/value pair with key @domain and empty object value
+            </p>
+            <p>
+                @domain is considering as a DB domain/table name
+            </p>
+            <p>
+                There are three methods to create/get/delete @domain
+            </p>
+            <ul>
+                <li style="padding: 8px;">
+                    1) addDomain(domain);
+                </li>
+                <li style="padding: 8px;">
+                    2) getData(domain);
+                </li>
+                <li style="padding: 8px;">
+                    3) delDomain(domain);
+                </li>
+            </ul>
+            <p>
+                Where @domain is a string name of your domain/table
+            </p>
+
+<!--            <input type="text" name="domain" placeholder="Domain Name">-->
+<!--            <input id="set_domain" type="button" name="save" value="Save">-->
+<!--            <input id="get_domain" type="button" name="save" value="Get">-->
+<!--            <input id="delete_domain" type="button" name="save" value="Delete">-->
+        </div>
+
+        <div class="wrap" style="padding: 8px;">
+            <h5>Add Record</h5>
+            <p>
+                Record is just a @record in the @domain, our recommendation is to give a
+                numeric names to records, so it would be possible to order records by ascend/descend.
+                (method to be done in upcoming updates), although we are going to make it for any types of record's names,
+                so it's doesn't really matter.
+            </p>
+            <p>
+                There are three methods to create/get/delete @domain
+            </p>
+            <ul>
+                <li style="padding: 8px;">
+                    1) addRecord(domain, property);
+                </li>
+                <li style="padding: 8px;">
+                    2) getRecord(domain, property, type);
+                    <br/><br/>
+                    Returns record as an object by default, and as JSON string with optional parameter @key = "json"
+                </li>
+                <li style="padding: 8px;">
+                    3) getRecordByProperty(domain, property, type);
+                    <br/><br/>
+                    Returns record as an object by default, and as JSON string with optional parameter @key = "json"
+                </li>
+                <li style="padding: 8px;">
+                    4) delRecord(domain, property);
+                </li>
+                <li style="padding: 8px;">
+                    5) delRecordByProperty(domain, property);
+                </li>
+            </ul>
+
+
+<!--            <input type="text" name="domain" placeholder="Domain Name">-->
+<!--            <input type="text" name="record" placeholder="Record Name">-->
+<!--            <br/><br/>-->
+<!--            <input id="add_record" type="button" value="Add record">-->
+<!--            <input id="find_record" type="button" value="Get record">-->
+<!--            <input id="delete_record" type="button" value="Delete record">-->
+        </div>
+
+        <div class="wrap" style="padding: 8px;">
+            <h5>Add Property</h5>
+<!--            <input type="text" name="domain" placeholder="Domain Name">-->
+<!--            <input type="text" name="record" placeholder="Record Name">-->
+<!--            <input type="text" name="property" placeholder="Property Name">-->
+<!--            <br/><br/>-->
+<!--            <input id="add_property" type="button" value="Add property">-->
+<!--            <input id="find_recordByProp" type="button" value="Get Record">-->
+<!--            <input id="find_property" type="button" value="Get property">-->
+        </div>
+
+<!--        <div class="wrap" style="padding: 8px;">-->
+<!--            <h5>Update Property</h5>-->
+<!--            <input type="text" name="domain" placeholder="Domain Name">-->
+<!--            <input type="text" name="record" placeholder="Record Name">-->
+<!--            <input type="text" name="property" placeholder="Property Name">-->
+<!--            <input type="text" name="property_val" placeholder="Property Value">-->
+<!--            -->
+<!--        </div>-->
+
+        <div class="wrap" style="padding: 8px;">
+            <h5>Add Property With Value</h5>
+<!--            <input type="text" name="domain" placeholder="Domain Name">-->
+<!--            <input type="text" name="record" placeholder="Record Name">-->
+<!--            <input type="text" name="property" placeholder="Property Name">-->
+<!--            <input type="text" name="property_val" placeholder="Property Value">-->
+<!--            <br/><br/>-->
+<!--            <input id="update_property" type="button" value="Update property">-->
+<!--            <input id="push_property" type="button" value="Push property">-->
+<!--            <input id="del_property" type="button" value="Delete property">-->
+        </div>
+
+        <div class="wrap" style="padding: 8px;">
+            <h5>Add Property Parameters</h5>
+            <input type="text" name="domain" placeholder="Domain Name">
+            <br/><br/>
+            <input id="set_domain" type="button" name="save" value="Save">
+            <input id="get_domain" type="button" name="save" value="Get">
+            <input id="delete_domain" type="button" name="save" value="Delete">
+            <br/><br/>
+            <input type="text" name="record" placeholder="Record Name">
+            <br/><br/>
+            <input id="add_record" type="button" value="Add record">
+            <input id="find_record" type="button" value="Get record">
+            <input id="delete_record" type="button" value="Delete record">
+            <br/><br/>
+            <input type="text" name="property" placeholder="Property Name">
+            <input type="text" name="property_val" placeholder="Property Value">
+            <br/><br/>
+            <input id="add_property" type="button" value="Add property">
+            <input id="find_recordByProp" type="button" value="Get Record">
+            <input id="find_property" type="button" value="Get property">
+            <br/><br/>
+            <input id="update_property" type="button" value="Update property">
+            <input id="push_property" type="button" value="Push property">
+            <input id="del_property" type="button" value="Delete property">
+            <br/><br/>
+            <input id="delby_property" type="button" value="Delete record by property">
+            <br/><br/>
+            <input type="text" name="param" placeholder="Parameter Name">
+            <input type="text" name="param_val" placeholder="Parameter Value">
+            <br/><br/>
+            <input id="add_prop_param" type="button" value="Push property parameter">
+            <input id="upd_prop_param" type="button" value="Update property parameter">
+            <br/><br/>
+            <input id="del_prop_param" type="button" value="Delete property parameter">
+        </div>
+
+
+        <div class="wrap" style="padding: 8px;">
+            <h5>Delete Record By Property</h5>
+<!--            <input type="text" name="domain" placeholder="Domain Name">-->
+<!--            <input type="text" name="property" placeholder="Property Name">-->
+<!--            <input id="delby_property" type="button" value="Delete record">-->
+
+        </div>
     </div>
-
-    <div class="wrap" style="padding: 8px;">
-        <h5>Add Record</h5>
-        <input type="text" name="domain" placeholder="Domain Name">
-        <input type="text" name="record" placeholder="Record Name">
-        <input id="add_record" type="button" value="Add record">
-        <input id="find_record" type="button" value="Find record">
-        <input id="delete_record" type="button" value="Delete record">
-    </div>
-
-    <div class="wrap" style="padding: 8px;">
-        <h5>Add Property</h5>
-        <input type="text" name="domain" placeholder="Domain Name">
-        <input type="text" name="record" placeholder="Record Name">
-        <input type="text" name="property" placeholder="Property Name">
-        <input id="add_property" type="button" value="Add property">
-        <input id="find_recordByProp" type="button" value="Find Record">
-        <input id="find_property" type="button" value="Retrive property">
-    </div>
-
-    <div class="wrap" style="padding: 8px;">
-        <h5>Update Property</h5>
-        <input type="text" name="domain" placeholder="Domain Name">
-        <input type="text" name="record" placeholder="Record Name">
-        <input type="text" name="property" placeholder="Property Name">
-        <input type="text" name="property_val" placeholder="Property Value">
-        <input id="update_property" type="button" value="Update property">
-    </div>
-
-    <div class="wrap" style="padding: 8px;">
-        <h5>Add Property With Value</h5>
-        <input type="text" name="domain" placeholder="Domain Name">
-        <input type="text" name="record" placeholder="Record Name">
-        <input type="text" name="property" placeholder="Property Name">
-        <input type="text" name="property_val" placeholder="Property Value">
-        <input id="push_property" type="button" value="Push property">
-    </div>
-
-    <div class="wrap" style="padding: 8px;">
-        <h5>Add Property Parameters</h5>
-        <input type="text" name="domain" placeholder="Domain Name">
-        <input type="text" name="record" placeholder="Record Name">
-        <input type="text" name="property" placeholder="Property Name">
-        <br/><br/>
-        <input type="text" name="param" placeholder="Parameter Name">
-        <input type="text" name="param_val" placeholder="Parameter Value">
-
-        <input id="add_prop_param" type="button" value="Push property parameter">
-
-        <br/><br/>
-        <input id="upd_prop_param" type="button" value="Update property parameter">
-    </div>
-
-
-    <div class="wrap" style="padding: 8px;">
-        <h5>Delete Record By Property</h5>
-        <input type="text" name="domain" placeholder="Domain Name">
-        <input type="text" name="property" placeholder="Property Name">
-        <input id="delby_property" type="button" value="Delete record">
-
-    </div>
-
     <script src="https://cdn.jsdelivr.net/gh/teobyte/bluesrc@2.0.8/js/bz-core.min.js"></script>
     <script src="src/asb.js"></script>
     <script>
         (function() {
-
-
-
-
             var setDomain = bzDom('#set_domain');
             setDomain.on('click', function() {
                 var $th = bzDom(this),
@@ -93,13 +186,13 @@
                 asb.addDomain(domainName);
             });
 
-            var retriveDomain = bzDom('#retrive_domain');
-            retriveDomain.on('click', function() {
+            var getDomain = bzDom('#get_domain');
+            getDomain.on('click', function() {
                 var $th = bzDom(this),
                     $wrap = $th.parent(),
                     $domain = $wrap.find('[name=domain]'),
                     domainName = $domain.val();
-                alert(JSON.stringify(asb.getData(domainName)));
+                alert(asb.getDomain(domainName, 'json'));
             });
 
             var delDomain = bzDom('#delete_domain');
@@ -141,7 +234,7 @@
                     $record = $wrap.find('[name=record]'),
                     domainName = $domain.val(),
                     recordName = $record.val();
-                alert(asb.findRecord(domainName, recordName, "json"));
+                alert(asb.getRecord(domainName, recordName, "json"));
             });
 
             var addProp = bzDom('#add_property');
@@ -180,7 +273,7 @@
                     $prop = $wrap.find('[name=property]'),
                     domainName = $domain.val(),
                     propName = $prop.val();
-                alert(asb.findRecordByProperty(domainName, propName, "json"));
+                alert(asb.getRecordByProperty(domainName, propName, "json"));
             });
 
             var pushProp = bzDom('#push_property');
@@ -198,6 +291,19 @@
                 asb.pushData(domainName, recordName, propName, propVal);
             });
 
+            var delProp = bzDom('#del_property');
+            delProp.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    $prop = $wrap.find('[name=property]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val(),
+                    propName = $prop.val();
+                asb.delProperty(domainName, recordName, propName);
+            });
+
             var findProp = bzDom('#find_property');
             findProp.on('click', function() {
                 var $th = bzDom(this),
@@ -208,7 +314,7 @@
                     domainName = $domain.val(),
                     recordName = $record.val(),
                     propName = $prop.val();
-                alert(asb.findProperty(domainName, recordName, propName, "json"));
+                alert(asb.getProperty(domainName, recordName, propName, "json"));
             });
 
             var addParam = bzDom('#add_prop_param');
@@ -226,6 +332,38 @@
                     paramName = $param.val(),
                     paramVal = $paramVal.val();
                 asb.addParameter(domainName, recordName, propName, paramName, paramVal);
+            });
+
+            var updParam = bzDom('#upd_prop_param');
+             updParam.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    $prop = $wrap.find('[name=property]'),
+                    $param = $wrap.find('[name=param]'),
+                    $paramVal = $wrap.find('[name=param_val]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val(),
+                    propName = $prop.val(),
+                    paramName = $param.val(),
+                    paramVal = $paramVal.val();
+                asb.updateParameter(domainName, recordName, propName, paramName, paramVal);
+            });
+
+            var delParam = bzDom('#del_prop_param');
+            delParam.on('click', function() {
+                var $th = bzDom(this),
+                    $wrap = $th.parent(),
+                    $domain = $wrap.find('[name=domain]'),
+                    $record = $wrap.find('[name=record]'),
+                    $prop = $wrap.find('[name=property]'),
+                    $param = $wrap.find('[name=param]'),
+                    domainName = $domain.val(),
+                    recordName = $record.val(),
+                    propName = $prop.val(),
+                    paramName = $param.val();
+                asb.delParameter(domainName, recordName, propName, paramName);
             });
 
             var delRecByProp = bzDom('#delby_property');

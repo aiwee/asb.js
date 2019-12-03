@@ -59,7 +59,7 @@
             } else {
                 return JSON.stringify(nObj);
             }
-        },
+        }
     };
     var asb = {
         /*
@@ -78,50 +78,49 @@
         /*
             Creates empty object in the local storage with key @name
          */
-        addDomain: function(name) {
+        addDomain: function(name, record) {
             util.quit(name);
-            localStorage.setItem(name, JSON.stringify({}));
+            record = record || {};
+            localStorage.setItem(name, JSON.stringify(record));
         },
         /*
             Creates new record in the @domain
          */
         addRecord: function(domain, record) {
             util.quit(domain, record);
-            var data = asb.getData(domain);
+            var data = asb.getDomain(domain);
             data[record] = {};
-            asb.saveData(domain, data);
+            //asb.saveData(domain, data);
+            asb.updateDomain(domain, data);
         },
         /*
             Creates new property in the record
          */
         addProperty: function(domain, record, property) {
             util.quit(domain, record, property);
-            var data = asb.getData(domain);
+            var data = asb.getDomain(domain);
             data[record][property] = "";
-            asb.saveData(domain, data);
+            //asb.saveData(domain, data);
+            asb.updateDomain(domain, data);
         },
         /*
             Gets domain by @name from the localStorage
          */
-        getDomain: function(name) {
-            util.quit(name);
-            return localStorage.getItem(name);
-        },
-        /*
-            Gets data from local storage as JSON object
-         */
-        getData: function(domain) {
+        getDomain: function(domain, type) {
             util.quit(domain);
-            return JSON.parse(asb.getDomain(domain));
+            var dmn = localStorage.getItem(domain);
+            if (type == 'json') return dmn;
+            else return JSON.parse(dmn);
         },
         /*
             Saves data to the domain
          */
         // ToDo: maybe updateDomain method will be enough
-        saveData: function(domain, data) {
-            util.quit(domain, data);
-            asb.updateDomain(domain, data);
-        },
+        // deprecated
+        // saveData: function(domain, data) {
+        //     util.quit(domain, data);
+        //     asb.updateDomain(domain, data);
+        // },
         /*
             Updates domain in the local storage
          */
@@ -134,33 +133,36 @@
          */
         updateRecord: function(domain, record, property) {
             util.quit(domain, record, property);
-            var data = asb.getData(domain);
+            var data = asb.getDomain(domain);
             data[record] = property;
-            asb.saveData(domain, data);
+            //asb.saveData(domain, data);
+            asb.updateDomain(domain, data);
         },
         /*
             Updates property in the record
          */
         updateProperty: function(domain, record, property, value) {
             util.quit(domain, record, property, value);
-            var data = asb.getData(domain);
+            var data = asb.getDomain(domain);
             data[record][property] = value;
-            asb.saveData(domain, data);
+            //asb.saveData(domain, data);
+            asb.updateDomain(domain, data);
         },
         pushData: function(domain, record, property, value) {
             util.quit(domain, record, property, value);
             if (!localStorage.getItem(domain))
                 asb.addDomain(domain);
-            var data = asb.getData(domain);
+            var data = asb.getDomain(domain);
             if (!data.hasOwnProperty(record))
                 asb.addRecord(domain, record);
-            data = asb.getData(domain);
+            data = asb.getDomain(domain);
             if (!data[record].hasOwnProperty(property))
                 asb.addProperty(domain, record, property);
 
-            data = asb.getData(domain);
+            data = asb.getDomain(domain);
             data[record][property] = value;
-            asb.saveData(domain, data);
+            //asb.saveData(domain, data);
+            asb.updateDomain(domain, data);
         },
         createDomain: function(model, recordPrefix) {
             util.quit(model);
@@ -175,12 +177,12 @@
         },
         count: function(domain) {
             util.quit(domain);
-            var data = asb.getData(domain);
+            var data = asb.getDomain(domain);
             return Object.keys(data).length;
         },
-        findRecord: function(domain, record, type) {
+        getRecord: function(domain, record, type) {
             util.quit(domain, record);
-            var data = asb.getData(domain),
+            var data = asb.getDomain(domain),
                 res = null;
             //var count = Object.keys(data).length;
             for (var prop in data) {
@@ -193,9 +195,9 @@
                 res = JSON.stringify(res);
             return res;
         },
-        findRecordByProperty: function(domain, property, type) {
+        getRecordByProperty: function(domain, property, type) {
             util.quit(domain, property);
-            var data = asb.getData(domain),
+            var data = asb.getDomain(domain),
                 result = {};
             for (var prop in data) {
                 if (data.hasOwnProperty(prop)) {
@@ -223,14 +225,15 @@
         },
         delRecord: function(domain, record) {
             util.quit(domain, record);
-            var data = asb.getData(domain);
+            var data = asb.getDomain(domain);
             var res;
             for (var prop in data) {
                 if (data.hasOwnProperty(prop)) {
                     if (prop === record) {
                         res = delete data[prop];
                         if (res)
-                            asb.saveData(domain, data);
+                            asb.updateDomain(domain, data);
+                            //asb.saveData(domain, data);
                     }
                 }
             }
@@ -238,7 +241,7 @@
         },
         delRecordByProperty: function(domain, property) {
             util.quit(domain, property);
-            var data = asb.getData(domain);
+            var data = asb.getDomain(domain);
             var res;
             for (var prop in data) {
                 if (data.hasOwnProperty(prop)) {
@@ -246,16 +249,17 @@
                     if (str.toLowerCase() === property.toLowerCase()) {
                         res = delete data[prop];
                         if (res)
-                            asb.saveData(domain, data);
+                            asb.updateDomain(domain, data);
+                            //asb.saveData(domain, data);
                     }
                 }
             }
             return res;
         },
-        findProperty: function(domain, record, property, type) {
+        getProperty: function(domain, record, property, type) {
             util.quit(domain, record, property);
             var res = null,
-                rec = asb.findRecord(domain, record);
+                rec = asb.getRecord(domain, record);
             for (var prop in rec)
                 if (rec.hasOwnProperty(prop))
                     if (prop === property)
@@ -263,17 +267,39 @@
             if (type == "json") return JSON.stringify(res);
             else return res;
         },
+        delProperty: function(domain, record, property) {
+            util.quit(domain, record, property);
+            var data = asb.getDomain(domain);
+            var res;
+            var rec = data[record];
+            for (var rc in rec) {
+                if (rec.hasOwnProperty(rc)) {
+                    if (rc === property) {
+                        res = delete rec[rc];
+                        if (res) {
+                            data[record] = rec;
+                            asb.updateDomain(domain, data);
+                            //asb.saveData(domain, data);
+                        }
+                    }
+                }
+            }
+            return res;
+        },
         /*
             **********************************************
             Manipulations with Property Value as an Object
             **********************************************
         */
+        /*
+            Adds parameter value
+         */
         addParameter: function(domain, record, property, param, value) {
             util.quit(domain, record, property, param, value);
-            var data = asb.getData(domain);
+            var data = asb.getDomain(domain);
             if (!data[record].hasOwnProperty(property))
                 asb.addProperty(domain, record, property);
-            data = asb.getData(domain);
+            data = asb.getDomain(domain);
 
             if (data[record][property] == "") {
                 var prm =new Object();
@@ -283,10 +309,49 @@
                 data[record][property][param] = value;
 
             //alert(JSON.stringify(data));
-            asb.saveData(domain, data);
+            //asb.saveData(domain, data);
+            asb.updateDomain(domain, data);
         },
-
-
+        /*
+            Updates parameter value
+         */
+        updateParameter: function(domain, record, property, param, value) {
+            util.quit(domain, record, property, param, value);
+            var data = asb.getDomain(domain);
+            data[record][property][param] = value;
+            //asb.saveData(domain, data);
+            asb.updateDomain(domain, data);
+        },
+        /*
+            Deletes property parameter
+         */
+        delParameter: function(domain, record, property, param) {
+            util.quit(domain, record, property, param);
+            var data = asb.getDomain(domain);
+            var res;
+            var prop = data[record][property];
+            for (var prm in prop) {
+                if (prop.hasOwnProperty(prm)) {
+                    if (prm === param) {
+                        res = delete prop[prm];
+                        if (res) {
+                            data[record][property] = prop;
+                            //asb.saveData(domain, data);
+                            asb.updateDomain(domain, data);
+                        }
+                    }
+                }
+            }
+            return res;
+        },
+        findParameter: function(domain, record, property, param, type) {
+            util.quit(domain, record, property, param);
+            var data = asb.getDomain(domain),
+                res = data[record][property][param];
+            if (type)
+                res = JSON.stringify(res);
+            return res;
+        },
         /*
             Finds in the @data property by @name and returns it's value as
             - default: an object
